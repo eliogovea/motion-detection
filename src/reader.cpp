@@ -35,6 +35,7 @@ bool RtspReader::start() {
         detector_->processNewFrame(copyFrame_);
     }
 
+    std::cout << "stream closed\n";
     return true;
 }
 

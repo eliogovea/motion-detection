@@ -4,11 +4,13 @@ namespace motion_detection {
 
 Detector::Detector() {
     cv::namedWindow("original", cv::WINDOW_AUTOSIZE); // TEST
+    cv::namedWindow("processed", cv::WINDOW_AUTOSIZE); // TEST
+    cv::namedWindow("delta", cv::WINDOW_AUTOSIZE); // TEST
 }
 
 void Detector::preprocessFrame(cv::Mat& frame) {
     cvtColor(frame, frame, cv::COLOR_BGR2GRAY);
-    cv::GaussianBlur(frame, frame, cv::Size(21, 21), 0);
+    cv::GaussianBlur(frame, frame, cv::Size(5, 5), 0);
 }
 
 void Detector::processNewFrame(cv::Mat frame) {
@@ -22,12 +24,15 @@ void Detector::processNewFrame(cv::Mat frame) {
         cv::adaptiveThreshold(deltaFrame_, deltaFrame_, 255, cv::THRESH_BINARY_INV, cv::ADAPTIVE_THRESH_MEAN_C, 71, 15);
         std::vector<std::vector<cv::Point>> contours;
         cv::findContours(deltaFrame_, contours, cv::noArray(), cv::RETR_LIST, cv::CHAIN_APPROX_SIMPLE);
-        deltaFrame_ = cv::Scalar::all(0);
+
         cv::drawContours(showFrame_, contours, -1, cv::Scalar::all(255));
+
+        cv::imshow("delta", deltaFrame_); // TEST
     }
 
     cv::imshow("original", showFrame_); // TEST
-    cv::waitKey(25); // TEST
+    cv::imshow("processed", frame); // TEST
+    cv::waitKey(1); // TEST
 
     started_ = true;
     frame.copyTo(prevFrame_);
