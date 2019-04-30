@@ -15,14 +15,21 @@ class Reader {
         virtual bool start() = 0;
 };
 
+struct RtspInfo {
+    std::string username;
+    std::string password;
+    std::string ip;
+    std::string path;
+};
+
 class RtspReader : public Reader {
     public:
-        RtspReader(const std::string&, Detector*);
+        RtspReader(const RtspInfo, Detector*);
         bool start() override;
         const std::string& streamPath() const;
         cv::Mat getFrame() const; 
     private:
-        std::string path_;
+        RtspInfo rtspInfo_;
         cv::VideoCapture video_;
         cv::Mat frame_;
         cv::Mat copyFrame_;

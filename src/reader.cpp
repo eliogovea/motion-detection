@@ -7,24 +7,22 @@ Reader::Reader() {
 
 }
 
-RtspReader::RtspReader(
-    const std::string& path, 
-    Detector* detector
-) : path_(path),
-    detector_(detector),
-    Reader() {
-
-}
-
-const std::string& RtspReader::streamPath() const {
-    return path_;
+RtspReader::RtspReader( RtspInfo rtspInfo, Detector* detector) 
+    : rtspInfo_(rtspInfo), detector_(detector), Reader() 
+{
 }
 
 bool RtspReader::start() {
-    video_.open(path_);
+    std::string streamPath = "rtsp://";
+    streamPath += rtspInfo_.username + ":" + rtspInfo_.password + "@";
+    streamPath += rtspInfo_.ip + rtspInfo_.path;
+
+    video_.open(streamPath);
 
     // TEST
-    if (path_ == "") {
+    if (!video_.isOpened()) {
+        std::cout << "could not open " << streamPath << "\n";
+        std::cout << "trying to open web cam ...\n";
         video_.open(0);
     } // TEST
     
@@ -32,10 +30,7 @@ bool RtspReader::start() {
         return false;
     }
 
-    // cv::namedWindow("original", cv::WINDOW_AUTOSIZE); // TEST
     while (video_.read(frame_)) {
-        // cv::imshow("original", frame_); // TEST
-        // cv::waitKey(25); // TEST
         frame_.copyTo(copyFrame_);
         detector_->processNewFrame(copyFrame_);
     }
