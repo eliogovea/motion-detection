@@ -1,50 +1,33 @@
+#include <iostream>
+
 #include <motion_detection/reader.h>
 
 
 namespace motion_detection {
 
-Reader::Reader() {
-
-}
-
-RtspReader::RtspReader( RtspInfo rtspInfo, Detector* detector) 
-    : rtspInfo_(rtspInfo), detector_(detector), Reader() 
-{
-}
-
-bool RtspReader::start() {
-    std::string streamPath = "rtsp://";
-    streamPath += rtspInfo_.username + ":" + rtspInfo_.password + "@";
-    streamPath += rtspInfo_.ip + rtspInfo_.path;
-
-    video_.open(streamPath);
-
-    // TEST
-    if (!video_.isOpened()) {
-        std::cout << "could not open " << streamPath << "\n";
-        std::cout << "trying to open web cam ...\n";
-        video_.open(0);
-    } // TEST
-    
-    if (!video_.isOpened()) {
-        return false;
+    reader::reader(const std::string& stream_path, std::shared_ptr<shared_data> const & shared_data_) : 
+        stream_path_(stream_path),  
+        shared_data_(shared_data_) {
     }
 
-    while (video_.read(frame_)) {
-        frame_.copyTo(copyFrame_);
-        detector_->processNewFrame(copyFrame_);
+    const std::string reader::stream_path() const {
+        return stream_path_;
     }
 
-    std::cout << "stream closed\n";
-    return true;
-}
+  void reader::start() {
+        video_.open(stream_path_);
 
-cv::Mat RtspReader::getFrame() const {
-    if (frame_.empty()) {
-        return {};
+        // TEST
+        if (!video_.isOpened()) {
+            std::cout << "could not open " << stream_path_ << "\n";
+            std::cout << "trying to open web cam ...\n";
+            video_.open(0);
+        }
+        // TEST
+
+        while (video_.read(last_frame_)) {
+            shared_data_->push(last_frame_); // deep copy ???
+        }
     }
-    frame_.copyTo(copyFrame_);
-    return copyFrame_;
-}
 
 } // namespace motion_detection

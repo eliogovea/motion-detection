@@ -11,14 +11,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    motion_detection::Detector detector{};
+    motion_detection::rtsp_info stream_info{argv[1], argv[2], argv[3], argv[4]};
 
-    motion_detection::RtspInfo rtspInfo{argv[1], argv[2], argv[3], argv[4]};
-    motion_detection::RtspReader reader{rtspInfo, &detector};
-
-    // start reader on a different thread
-    // std::thread read(&motion_detection::RtspReader::start, &reader);
-    // read.join();
-
-    reader.start();
+    motion_detection::controller{stream_info};
 }

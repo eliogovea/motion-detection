@@ -9,11 +9,15 @@ find_package(Threads)
 
 # build library
 add_library(motion_detection_lib
-    #    include/motion_detection/motion_detection.h
+    include/motion_detection/motion_detection.h
+    include/motion_detection/shared_data.h
     include/motion_detection/reader.h
     include/motion_detection/detector.h
+    include/motion_detection/controller.h
     src/reader.cpp
     src/detector.cpp
+    src/controller
+    src/shared_data.cpp
 )
 
 # setup include directories

@@ -1,39 +1,25 @@
 #pragma once
 
-#include <string>
+#include <condition_variable>
 #include <memory>
+#include <string>
 
 #include <opencv2/opencv.hpp>
 
-#include <motion_detection/detector.h>
+#include <motion_detection/shared_data.h>
 
 namespace motion_detection {
 
-class Reader {
+class reader {
     public:
-        explicit Reader();
-        virtual bool start() = 0;
-};
-
-struct RtspInfo {
-    std::string username;
-    std::string password;
-    std::string ip;
-    std::string path;
-};
-
-class RtspReader : public Reader {
-    public:
-        RtspReader(const RtspInfo, Detector*);
-        bool start() override;
-        const std::string& streamPath() const;
-        cv::Mat getFrame() const; 
+        reader(const std::string& stream_path, std::shared_ptr<shared_data> const &);
+        void start();
+        const std::string stream_path() const;
     private:
-        RtspInfo rtspInfo_;
+        std::shared_ptr<shared_data> shared_data_;
+        std::string stream_path_;
         cv::VideoCapture video_;
-        cv::Mat frame_;
-        cv::Mat copyFrame_;
-        Detector* detector_ = nullptr;
+        cv::Mat last_frame_;
 };
 
 } // namespace motion_detection

@@ -1,19 +1,23 @@
 #pragma once
 
+#include <memory>
+
 #include <opencv2/opencv.hpp>
+
+#include <motion_detection/shared_data.h>
 
 namespace motion_detection {
 
-class Detector {
-    public:
-        explicit Detector();
-        void processNewFrame(cv::Mat frame);
-        void preprocessFrame(cv::Mat& frame);
-    private:
-        bool started_ = false;
-        cv::Mat prevFrame_;
-        cv::Mat deltaFrame_;
-        cv::Mat showFrame_;
-};
+    class detector {
+        public:
+            explicit detector(std::shared_ptr<shared_data> const &);
+            void start();
+        private:
+            std::shared_ptr<shared_data> shared_data_;
+            cv::Mat current_frame_{};
+            cv::Mat prev_frame_{};
+            cv::Mat delta_frame_{};
+            cv::Mat show_frame_{}; // TEST
+    };
 
-} // namespace motion_detection
+} // namespace motion_detction
