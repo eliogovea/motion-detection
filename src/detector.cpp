@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <motion_detection/detector.h>
 
 namespace motion_detection {
@@ -29,9 +31,18 @@ namespace motion_detection {
                 std::vector<std::vector<cv::Point>> contours;
                 cv::findContours(delta_frame_, contours, cv::noArray(), cv::RETR_LIST, cv::CHAIN_APPROX_SIMPLE);
 
+                // TODO remove small contours
+
                 // TEST
                 cv::drawContours(show_frame_, contours, -1, cv::Scalar::all(255));
                 cv::imshow("delta", delta_frame_);
+
+                std::cout << contours.size() << "\n";
+                if (contours.size() > 1) {
+                    recorder_.save(show_frame_);
+                } else {
+                    recorder_.close_record();
+                }
                 // TEST
 
             }

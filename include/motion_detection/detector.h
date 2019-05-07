@@ -5,6 +5,7 @@
 #include <opencv2/opencv.hpp>
 
 #include <motion_detection/shared_data.h>
+#include <motion_detection/recorder.h>
 
 namespace motion_detection {
 
@@ -17,7 +18,10 @@ namespace motion_detection {
             cv::Mat current_frame_{};
             cv::Mat prev_frame_{};
             cv::Mat delta_frame_{};
-            cv::Mat show_frame_{}; // TEST
+
+            // TEST
+            cv::Mat show_frame_{};
+            recorder recorder_{};
     };
 
 } // namespace motion_detction

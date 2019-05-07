@@ -14,10 +14,12 @@ add_library(motion_detection_lib
     include/motion_detection/reader.h
     include/motion_detection/detector.h
     include/motion_detection/controller.h
+    include/motion_detection/recorder.h
     src/reader.cpp
     src/detector.cpp
     src/controller
     src/shared_data.cpp
+    src/recorder.cpp
 )
 
 # setup include directories
