@@ -8,8 +8,8 @@ namespace motion_detection {
         shared_data_(_shared_data) {
         // TEST
         cv::namedWindow("original", cv::WINDOW_AUTOSIZE);
-        cv::namedWindow("processed", cv::WINDOW_AUTOSIZE);
-        cv::namedWindow("delta", cv::WINDOW_AUTOSIZE);
+        // cv::namedWindow("processed", cv::WINDOW_AUTOSIZE);
+        // cv::namedWindow("delta", cv::WINDOW_AUTOSIZE);
         // TEST
     }
 
@@ -35,21 +35,15 @@ namespace motion_detection {
 
                 // TEST
                 cv::drawContours(show_frame_, contours, -1, cv::Scalar::all(255));
-                cv::imshow("delta", delta_frame_);
-
-                std::cout << contours.size() << "\n";
-                if (contours.size() > 1) {
-                    recorder_.save(show_frame_);
-                } else {
-                    recorder_.close_record();
-                }
+                // std::cout << contours.size() << "\n";
                 // TEST
-
+                
+                recorder_.save(show_frame_, static_cast<int>(contours.size()));
             }
 
             // TEST
             cv::imshow("original", show_frame_);
-            cv::imshow("processed", current_frame_);
+            // cv::imshow("processed", current_frame_);
             cv::waitKey(1);
             // TEST
 

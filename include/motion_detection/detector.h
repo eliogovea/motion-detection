@@ -21,7 +21,7 @@ namespace motion_detection {
 
             // TEST
             cv::Mat show_frame_{};
-            recorder recorder_{};
+            recorder recorder_{""};
     };
 
 } // namespace motion_detction
