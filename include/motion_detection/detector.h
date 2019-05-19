@@ -9,6 +9,23 @@
 
 namespace motion_detection {
 
+    class detector_base { // interface
+        public:
+            virtual void add_frame(const cv::Mat&) = 0;
+            virtual ~detector_base() = default;
+    };
+
+    class detector_abs_diff : public detector_base {
+        public:
+            detector_abs_diff();
+            void add_frame(const cv::Mat& frame) override;
+            ~detector_abs_diff() = default;
+        private:
+            cv::Mat curr_frame_{};
+            cv::Mat prev_frame_{};
+            cv::Mat deta_frame_{};
+    };
+
     class detector {
         public:
             explicit detector(std::shared_ptr<shared_data> const &);

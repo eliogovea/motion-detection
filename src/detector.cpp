@@ -3,7 +3,24 @@
 #include <motion_detection/detector.h>
 
 namespace motion_detection {
+
+    ///////////////////////////////////////////////////////////////////////
+    detector_abs_diff::detector_abs_diff() {
+
+    }
+
+    void detector_abs_diff::add_frame(const cv::Mat& frame) {
+        curr_frame_.copyTo(prev_frame_);
+        frame.copyTo(curr_frame_);
+
+        // 
+        cvtColor(curr_frame_, curr_frame_, cv::COLOR_BGR2GRAY);
+        cv::GaussianBlur(curr_frame_, curr_frame_, cv::Size(5, 5), 0);
+        
+        // TODO
+    }
     
+    ////////////////////////////////////////////////////////////////////////
     detector::detector(std::shared_ptr<shared_data> const & _shared_data) :
         shared_data_(_shared_data) {
         // TEST
