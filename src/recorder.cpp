@@ -31,23 +31,26 @@ namespace motion_detection {
     }
 
     void recorder::save(cv::Mat& image, int contours) {
+        // std::cout << contours << std::endl;
         if (contours <= 1) {
-            if (current_frames_count_ == 0) {
-                return;
+            if (!writer_.isOpened()) {
+              return;
             }
-            bool time_condition = true; // TODO
-            if (time_condition) {
-                close_record();
+            // std::cout << "no detection\n";
+            std::chrono::duration<double> delta = std::chrono::system_clock::now() - last_detection_;
+            if (delta.count() > 1.0) {
+              close_record();
             }
             return;
         }
+
+        last_detection_ = std::chrono::system_clock::now();
 
         if (!writer_.isOpened()) {
             open_record();
         }
 
         writer_.write(image);
-        last_detection_ = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()); 
         current_frames_count_++;
     }
 }

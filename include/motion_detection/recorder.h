@@ -18,7 +18,7 @@ namespace motion_detection {
             cv::VideoWriter writer_{};
             int videos_count_{0};
 
-            time_t last_detection_{};
+            std::chrono::time_point<std::chrono::system_clock> last_detection_{};
             int current_frames_count_{0};
     };
 }
